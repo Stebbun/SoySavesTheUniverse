@@ -66,6 +66,8 @@ function preload() {
 
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
+
+	game.load.image('gg', 'assets/game_over.png');
 }
 
 function create(){
@@ -366,6 +368,7 @@ function update(){
 }
 
 function restart(){
+	music.stop();
     game.state.start(game.state.current);
 }
 
