@@ -412,7 +412,9 @@ function damageEnemy(soyBottle,enemy){
 		enemies.remove(enemy);
 		score += 100;
         scoreText.text = 'Score: ' + score;
-        enemyCount--;
+		if (enemy.type==0 || enemy.type == 1 || enemy.type == 4){
+			enemyCount--;
+		}
     }
     
 }
@@ -427,8 +429,16 @@ function gameplay(){
     enemyMovementHandler();
 	
 	bossMovementHandler();
+	
+	cleanBullets();
 }
 
+function cleanBullets(){
+	enemyProjectiles.forEachDead(function(projectile){
+		enemyProjectiles.remove(projectile);
+	}, this);
+	
+}
 function enemyMovementHandler(){
     enemies.forEach(function(enemy){
 		if(enemy.move!==0){
