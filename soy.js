@@ -95,6 +95,7 @@ function create(){
 }
 
 function makeHealthBar(){
+	console.log("Q");
     healthBack = game.add.sprite(0, game.world.height-32, 'health_back');
     healthFore = game.add.sprite(0, game.world.height-32, 'health_fore');
 	healthBack.width = game.width;
