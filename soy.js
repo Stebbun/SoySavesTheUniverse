@@ -149,21 +149,25 @@ function makeEnemyTimer(){
 }
 
 function spawnEnemy(){
-	if (boss.keyWord=='boss1'){
-		var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
-		baddie.type = 2;
-		baddie.move = 0;
-		baddie.health = 5;
-		baddie.shoot = 50;
-		game.physics.arcade.enable(baddie);
-	} else if (boss.keyWord == 'boss2'){
-		var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
-		baddie.type = 2;
-		baddie.move = 0;
-		baddie.health = 5;
-		baddie.shoot = 50;
-		game.physics.arcade.enable(baddie);
-	} else if(gameStarted && enemyCount < 10){
+	if (bosses.length===1){
+		boss = bosses.getTop();
+		if (boss.keyWord=='boss1'){
+			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+			baddie.type = 2;
+			baddie.move = 0;
+			baddie.health = 5;
+			baddie.shoot = 50;
+			game.physics.arcade.enable(baddie);
+		} else if (boss.keyWord == 'boss2'){
+			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+			baddie.type = 2;
+			baddie.move = 0;
+			baddie.health = 5;
+			baddie.shoot = 50;
+			game.physics.arcade.enable(baddie);
+		} 
+	}
+	if(gameStarted && enemyCount < 10){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
@@ -314,9 +318,16 @@ function enemyMovementHandler(){
 				enemy.body.velocity.y = Math.random()*-100;
 			}
 		} else {
-			enemy.body.velocity.x = Math.random()*200-100;
-			enemy.body.velocity.y = Math.random()*200-100;
-			enemy.move = Math.floor(Math.random()*50+20);
+			if (enemy.type===2){
+				if (enemy.body.velocity.x === 0){
+					enemy.body.velocity.x = Math.random()*200-100;
+				}
+				enemy.body.velocity.y = 100;
+			} else {
+				enemy.body.velocity.x = Math.random()*200-100;
+				enemy.body.velocity.y = Math.random()*200-100;
+				enemy.move = Math.floor(Math.random()*50+20);
+			}
 		}
 		enemy.shoot--;
 		if (enemy.shoot==0){
@@ -397,6 +408,9 @@ function enemyfire(enemy){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'hotdog_projectile');
 		minifood.body.velocity.x = (collisionShip.x-enemy.body.x)*.9;
 		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*.9;
+	} else {
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
+		minifood.body.velocity.y = 100;
 	}
 	
 }
