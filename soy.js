@@ -194,9 +194,11 @@ function spawnEnemy(){
 }
 
 function spawnBoss(){
-	if (score >= 1000 && score <= 2000 && bosses.length===0){
+	if (bosstype === 4){
+		bosstype = 4;
+	} else if (score >= 1000 && score <= 2000 && bosses.length===0){
 		bosstype = 1;
-	}else if(score>=2000&&3500 && bosses.length == 0){
+	} else if(score>=2000 && bosses.length == 0){
         bosstype = 2;
     }
 	if (gameStarted && bosstype===1){
@@ -302,7 +304,10 @@ function damageBoss(soyBottle, boss){
 	soyBottle.kill();
 	boss.health--;
 	if (boss.health==0){
-		boss.kill;
+		boss.type
+		if (boss.keyWord == 'boss2'){
+			bosstype = 4;
+		}
 		bosses.remove(boss);
 		score+=500;
 		scoreText.text = 'Score: ' + score;
