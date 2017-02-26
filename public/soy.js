@@ -246,14 +246,14 @@ function makeEnemyTimer(){
 function spawnEnemy(){
 	if (bosses.length===1){
 		boss = bosses.getTop();
-		if (boss.keyWord=='boss1'){
-			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+		if (boss.keyWord=='boss1' && boss.frame != 0){
+			var baddie = enemies.create(boss.body.x + boss.body.width/3,boss.body.y + boss.body.height,'burger');
 			baddie.type = 2;
 			baddie.move = 0;
 			baddie.health = 5;
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
-		} else if (boss.keyWord == 'boss2'){
+		} else if (boss.keyWord == 'boss2' && boss.frame != 0){
 			var baddie = enemies.create(boss.body.x + boss.body.width/2,boss.body.y + boss.body.height,'fry_boss');
 			baddie.type = 5;
 			baddie.move = 0;
