@@ -255,7 +255,7 @@ function spawnEnemy(){
 function spawnBoss(){
 	if (bosstype === 4){
 		bosstype = 4;
-	} else if (score >= 1000 && score <= 2000 && bosses.length===0){
+	} else if (score >= 1000 && score <= 1500 && bosses.length===0){
 		bosstype = 1;
 	} else if(score>=2000 && bosses.length == 0){
         bosstype = 2;
