@@ -322,7 +322,7 @@ function enemyMovementHandler(){
 				if (enemy.body.velocity.x === 0){
 					enemy.body.velocity.x = Math.random()*200-100;
 				}
-				enemy.body.velocity.y = 100;
+				enemy.body.velocity.y = 200;
 			} else {
 				enemy.body.velocity.x = Math.random()*200-100;
 				enemy.body.velocity.y = Math.random()*200-100;
