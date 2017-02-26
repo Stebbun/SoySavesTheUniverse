@@ -36,6 +36,8 @@ var bossSpawnTimer;
 var bossProjectiles;
 var bosstype=0;
 
+var healthDrops;
+
 function preload() {
     game.load.spritesheet('ship', 'assets/Ship.png', 64, 64);
     game.load.image('sky', 'assets/space_background.png');
@@ -62,7 +64,8 @@ function preload() {
     game.load.spritesheet('mrbean', 'assets/mrbeansprite.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
     game.load.image('soylent', 'assets/soylent.png');
-
+	
+	game.load.image('health', 'assets/Item_Health.png');
 
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
@@ -190,6 +193,9 @@ function makeInitEnemies(){
     enemies = game.add.group();
     enemies.enableBody = true;
 	bosses = game.add.group();
+	healthDrops = game.add.group();
+	healthDrops.enableBody = true;
+	healthDrops.phyicsBodyType = Phaser.Physics.ARCADE;
 
     for(var i = 0; i < 5; i++){
         var baddie = enemies.create(i*160, 0, 'burger');
@@ -334,6 +340,7 @@ function update(){
     //game.physics.arcade.collide(collisionShip,enemies);
     //damagePlayer(collisionShip,enemies);
     if(!isDead){
+		game.physics.arcade.overlap(collisionShip, healthDrops, healPlayer, null, this);
         game.physics.arcade.overlap(collisionShip, enemies, damagePlayer,null,this);
         game.physics.arcade.overlap(collisionShip, enemyProjectiles, damagePlayer, null, this);
         collisionShip.x = ship.x+21;
@@ -366,6 +373,12 @@ function restart(){
     game.state.start(game.state.current);
 }
 
+function healPlayer(collisionShip, health){
+	health.kill();
+	healthDrops.remove(health);
+	ship.health = 512;
+	healthFore.width = game.width *(ship.health / 512);
+}
 function damagePlayer(collisionShip,enemy){
     ship.health = ship.health - (512/5)
 	healthFore.width = game.width *(ship.health / 512);
@@ -420,6 +433,10 @@ function damageEnemy(soyBottle,enemy){
 		if (enemy.type==0 || enemy.type == 1 || enemy.type == 4){
 			enemyCount--;
 		}
+		if (Math.random()>.90){
+			var health = healthDrops.create(enemy.body.x, enemy.body.y, 'health');
+			health.body.velocity.y = 100;
+		}
     }
     
 }
@@ -439,6 +456,10 @@ function gameplay(){
 }
 
 function cleanBullets(){
+	enemyProjectiles.setAll('checkWorldBounds',true);
+	enemyProjectiles.setAll('outOfBoundsKill',true);
+	enemies.setAll('checkWorldBounds',true);
+	enemies.setAll('outOfBoundsKill',true);
 	enemyProjectiles.forEachDead(function(projectile){
 		enemyProjectiles.remove(projectile);
 	}, this);
