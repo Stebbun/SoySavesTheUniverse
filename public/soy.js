@@ -378,6 +378,8 @@ function update(){
 		if(!isGGPrompted)
 			promptGG();
 		if(spaceKey.isDown && isRestart){
+			ship.frame = 0;
+			guntype = 0;
 			restart();
 		}
     }
