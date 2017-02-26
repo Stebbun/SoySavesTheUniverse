@@ -106,6 +106,7 @@ function create(){
     //add player controlled ship
     ship = game.add.sprite(32, game.world.height - 150, 'ship');
 	ship.health = 512;
+	ship.firedelay = 8;
     ship.animations.add('death', [1, 2, 3], 5, true);
     collisionShip = game.add.sprite(ship.x + 21,game.world.height - 140, 'colShip');
     game.physics.arcade.enable(collisionShip);
@@ -321,7 +322,7 @@ function makeProjectiles(){
     soyBottles.enableBody = true;
     soyBottles.physicsBodyType = Phaser.Physics.ARCADE;
 
-    soyBottles.createMultiple(50, 'soybottle');
+    soyBottles.createMultiple(10, 'soybottle');
     soyBottles.setAll('checkWorldBounds', true);
     soyBottles.setAll('outOfBoundsKill', true);
 
@@ -526,12 +527,17 @@ function cleanBullets(){
 	enemyProjectiles.setAll('outOfBoundsKill',true);
 	enemies.setAll('checkWorldBounds',true);
 	enemies.setAll('outOfBoundsKill',true);
+	soyBottles.setAll('checkWorldBounds',true);
+	soyBottles.setAll('outOfBoundsKill',true);
 	enemyProjectiles.forEachDead(function(projectile){
 		enemyProjectiles.remove(projectile);
 	}, this);
 	enemies.forEachDead(function(enemy){
 		enemies.remove(enemy);
 	}, this);
+	soyBottles.forEachDead(function(bottle){
+		soyBottles.remove(bottle);
+	},this);
 }
 function enemyMovementHandler(){
     enemies.forEach(function(enemy){
@@ -630,12 +636,12 @@ function controlHandler(){
 }
 
 function fire(){
-    if(game.time.now > nextFireTime && pelletPtr.countDead() > 0){
-        nextFireTime = game.time.now + fireRate;
-        var pellet = pelletPtr.getFirstDead();
-        pellet.reset(ship.x+16.5, ship.y);
-        pellet.body.velocity.y = -350;
-    }
+	if(ship.firedelay==0){
+		var pellet = soyBottles.create(ship.x+16.5,ship.y,'soybottle');
+		pellet.body.velocity.y = -350;
+		ship.firedelay = 8;
+	}
+	ship.firedelay--;
 }
 
 function enemyfire(enemy){
