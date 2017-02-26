@@ -340,6 +340,9 @@ function update(){
         collisionShip.y = ship.y+10;
     }else{
         ship.animations.play('death');
+		if(spaceKey.isDown){
+			restart();
+		}
     }
     
     if(gameStarted){
