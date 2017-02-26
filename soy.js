@@ -16,7 +16,7 @@ var shipProjectiles;
 var soyBottles;
 var soyMilks;
 var soyBeans;
-
+var isDead;
 var pelletPtr;
 
 var enemies;
@@ -48,6 +48,7 @@ function preload() {
 
 function create(){
     //initialize variables
+	isDead = false;
     gameStarted = true;
     fireRate = 100;
     nextFireTime = 0;
@@ -224,6 +225,7 @@ function damagePlayer(collisionShip,enemy){
     if(ship.health <= 3){
         ship.kill();
         collisionShip.kill();
+		isDead = true;
     }
 }
 function damageEnemy(soyBottle,enemy){
@@ -297,7 +299,9 @@ function controlHandler(){
     }
 
     if(spaceKey.isDown){
-        fire();
+		if(!isDead){
+			fire();
+		}
 		ship.frame = 6;
     }
 }
