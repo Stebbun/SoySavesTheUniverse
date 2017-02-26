@@ -149,24 +149,7 @@ function spawnEnemy(){
 }
 
 function makeProjectiles(){
-    //behavior for all projectiles, including friendly and enemy
-    // projectiles = game.add.group();
-    // shipProjectiles = game.add.group();
-    // soyBottles = game.add.group();
-    // soyMilks = game.add.group();
-    // soyBeans = game.add.group();
-
-    // shipProjectiles.add(soyBottles);
-    // shipProjectiles.add(soyMilks);
-    // shipProjectiles.add(soyBeans);
-    // projectiles.add(shipProjectiles);
-
-
-    // projectiles.enableBody = true;
-    // projectiles.physicsBodyType = Phaser.Physics.ARCADE;
-
-    //ship projectiles
-    //soyBottles first
+	
 	enemyProjectiles = game.add.group();
 	enemyProjectiles.enableBody = true;
 	enemyProjectiles.phyicsBodyType = Phaser.Physics.ARCADE;
