@@ -22,6 +22,7 @@ var pelletPtr;
 var enemies;
 var enemySpawnTimer;
 var enemyCount;
+var enemyProjectiles
 
 var cursors;
 var spaceKey;
@@ -39,6 +40,7 @@ function preload() {
     game.load.image('health_back', 'assets/Health_Background.png');
 
     game.load.image('burger', 'assets/Burger_Enemy.png');
+	game.load.image('burger_projectile', 'assets/Burger_Projectile.png');
 }
 
 function create(){
@@ -108,6 +110,7 @@ function makeInitEnemies(){
         var baddie = enemies.create(i*160, 0, 'burger');
 		baddie.move = 0;
 		baddie.health = 5;
+		baddie.shoot = 50;
 		game.physics.arcade.enable(baddie);
         enemyCount++;
     }
@@ -126,6 +129,7 @@ function spawnEnemy(){
         var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 		baddie.move = 0;
 		baddie.health = 5;
+		baddie.shoot = 50;
         enemyCount++;
 		game.physics.arcade.enable(baddie);
     }
@@ -150,6 +154,14 @@ function makeProjectiles(){
 
     //ship projectiles
     //soyBottles first
+	enemyProjectiles = game.add.group();
+	enemyProjectiles.enableBody = true;
+	enemyProjectiles.phyicsBodyType = Phaser.Physics.ARCADE;
+	
+	enemyProjectiles.createMultiple(50, 'burger_projectile');
+	enemyProjectiles.setAll('checkWorldBounds',true);
+	enemyProjectiles.setAll('outOfBoundsKill',true);
+	
 
     soyBottles = game.add.group();
     soyBottles.enableBody = true;
@@ -240,6 +252,11 @@ function enemyMovementHandler(){
 			enemy.body.velocity.y = Math.random()*200-100;
 			enemy.move = Math.floor(Math.random()*50+20);
 		}
+		enemy.shoot--;
+		if (enemy.shoot==0){
+			enemyfire(enemy);
+			enemy.shoot = 50;
+		}
     }, this);
 }
 
@@ -276,4 +293,10 @@ function fire(){
         pellet.reset(ship.x+16.5, ship.y);
         pellet.body.velocity.y = -350;
     }
+}
+
+function enemyfire(enemy){
+	var minifood = enemyProjectiles.getFirstDead();
+	minifood.reset(enemy.body.x,enemy.body.y);
+	minifood.body.velocity.y = 100;
 }
