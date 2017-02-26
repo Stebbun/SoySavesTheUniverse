@@ -454,7 +454,13 @@ function enemyfire(enemy){
 	} else if(enemy.type == 4 || enemy.type == 5){
         var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
 		minifood.body.velocity.x = 0;
-		minifood.body.velocity.y = 200;
+		minifood.body.velocity.y = 400;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+		minifood.body.velocity.x = 40;
+		minifood.body.velocity.y = 400;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+		minifood.body.velocity.x = -40;
+		minifood.body.velocity.y = 400;
 	} else {
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
 		minifood.body.velocity.y = 100;
