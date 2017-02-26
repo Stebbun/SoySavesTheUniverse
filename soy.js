@@ -395,12 +395,38 @@ function damageBoss(soyBottle, boss){
 	}
 }
 function damageEnemy(soyBottle,enemy){
+    manaFore.height += 10; 
+    manaFore.y -=10;
     soyBottle.kill();
-    manaFore.height += 3; 
-    manaFore.y -=3;
     if(manaFore.height >= 256){
+        manaFore.y += manaFore.height;
         manaFore.height = 0;
-        manaFore.y += 256;
+        var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = 0;
+		minifood.body.velocity.y = 400;
+		var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = 0;
+		minifood.body.velocity.y = -400;
+		var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = 400;
+		minifood.body.velocity.y = 0;
+        var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = -400;
+		minifood.body.velocity.y = 0;
+		var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = 400;
+		minifood.body.velocity.y = -400;
+		var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = -400;
+		minifood.body.velocity.y = 400;
+        var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = 400;
+		minifood.body.velocity.y = 400;
+        var minifood = soyBottles.create(soyBottle.body.x,soyBottle.body.y,'soybottle');
+		minifood.body.velocity.x = -400;
+		minifood.body.velocity.y = -400;
+        
+        
     }
     enemy.health -= 1;
     if(enemy.health == 0){
