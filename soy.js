@@ -162,7 +162,7 @@ function spawnEnemy(){
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
 		} else if (boss.keyWord == 'boss2'){
-			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+			var baddie = enemies.create(boss.body.x,boss.body.y,'fry_boss');
 			baddie.type = 2;
 			baddie.move = 0;
 			baddie.health = 5;
@@ -192,7 +192,7 @@ function spawnEnemy(){
 function spawnBoss(){
 	if (score >= 1000 && score <= 2000 && bosses.length===0){
 		bosstype = 1;
-	}else if(score>=2500&&3500 && bosses.length == 1){
+	}else if(score>=2000&&3500 && bosses.length == 1){
         bosstype = 2;
     }
 	if (gameStarted && bosstype===1){
@@ -212,7 +212,6 @@ function spawnBoss(){
 		boss.body.velocity.x = 200;
 		boss.animations.add('boss2',[0,1,2], 5, true);
         boss.keyWord = 'boss2';
-        spawnFriesBoss();
 		bosstype = 0;
     }
 }
