@@ -196,6 +196,7 @@ function update(){
     //game.physics.arcade.collide(collisionShip,enemies);
     //damagePlayer(collisionShip,enemies);
     game.physics.arcade.overlap(collisionShip, enemies, damagePlayer,null,this);
+	game.physics.arcade.overlap(collisionShip, enemyProjectiles, damagePlayer, null, this);
     collisionShip.x = ship.x+21;
     collisionShip.y = ship.y+10;
     if(gameStarted){
