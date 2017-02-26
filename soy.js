@@ -528,7 +528,7 @@ function fire(){
 }
 
 function enemyfire(enemy){
-	if (enemy.type === 0){
+	if (enemy.type === 0 || enemy.type === 2){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
 		minifood.body.velocity.y = 100;
 	} else if (enemy.type === 1){
