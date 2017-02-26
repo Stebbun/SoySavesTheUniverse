@@ -37,6 +37,7 @@ var bossProjectiles;
 var bosstype=0;
 
 var healthDrops;
+var burpSound;
 
 function preload() {
     game.load.spritesheet('ship', 'assets/Ship.png', 64, 64);
@@ -46,6 +47,7 @@ function preload() {
 	game.load.image('colShip', 'assets/collisionShip.png');
     game.load.image('soybottle', 'assets/Ship_Projectile.png');
     game.load.audio('soy_song', 'assets/soy_sonata.wav');
+	game.load.audio('burp', 'assets/BURP.wav');
 	
 	game.load.image('health_fore', 'assets/Health_Foreground.png');
     game.load.image('health_back', 'assets/Health_Background.png');
@@ -86,6 +88,7 @@ function create(){
     music.loop = true;
     music.play();
 
+	burpSound = game.add.audio('burp');
     //enable physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
 
@@ -402,6 +405,7 @@ function damageBoss(soyBottle, boss){
 		if (boss.keyWord == 'boss2'){
 			bosstype = 4;
 		}
+		burpSound.play();
 		bosses.remove(boss);
 		score+=500;
 		scoreText.text = 'Score: ' + score;
