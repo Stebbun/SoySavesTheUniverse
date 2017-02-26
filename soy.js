@@ -79,6 +79,7 @@ function create(){
     //add player controlled ship
     ship = game.add.sprite(32, game.world.height - 150, 'ship');
 	ship.health = 512;
+    ship.animations.add('death', [1, 2, 3], 5, true);
     collisionShip = game.add.sprite(ship.x + 21,game.world.height - 140, 'colShip');
     game.physics.arcade.enable(collisionShip);
     collisionShip.visible = true;
@@ -232,10 +233,15 @@ function update(){
     game.physics.arcade.overlap(soyBottles, enemies, damageEnemy,null,this);
     //game.physics.arcade.collide(collisionShip,enemies);
     //damagePlayer(collisionShip,enemies);
-    game.physics.arcade.overlap(collisionShip, enemies, damagePlayer,null,this);
-	game.physics.arcade.overlap(collisionShip, enemyProjectiles, damagePlayer, null, this);
-    collisionShip.x = ship.x+21;
-    collisionShip.y = ship.y+10;
+    if(!isDead){
+        game.physics.arcade.overlap(collisionShip, enemies, damagePlayer,null,this);
+        game.physics.arcade.overlap(collisionShip, enemyProjectiles, damagePlayer, null, this);
+        collisionShip.x = ship.x+21;
+        collisionShip.y = ship.y+10;
+    }else{
+        ship.animations.play('death');
+    }
+    
     if(gameStarted){
         gameplay();
     }
@@ -245,7 +251,6 @@ function damagePlayer(collisionShip,enemy){
 	healthFore.width = game.width *(ship.health / 512);
     enemy.kill();
     if(ship.health <= 3){
-        ship.kill();
         collisionShip.kill();
 		isDead = true;
     }
@@ -312,6 +317,9 @@ function bossMovementHandler(){
 	}, this);
 }
 function controlHandler(){
+    if(isDead){
+        return;
+    }
     //remove this comment after adding animations
     if(cursors.left.isDown){
         ship.body.velocity.x = -300;
@@ -327,8 +335,10 @@ function controlHandler(){
     }
     else{
         // idle
-        ship.animations.stop();
-        ship.frame = 0;
+        if(!isDead){
+            ship.animations.stop();
+            ship.frame = 0;
+        }
     }
 
     if(spaceKey.isDown){
