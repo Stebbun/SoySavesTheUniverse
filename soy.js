@@ -49,7 +49,7 @@ function preload() {
 	
 	game.load.image('hotdog', 'assets/HotDog.png');
 	game.load.image('hotdog_projectile', 'assets/HotDog_Projectile.png');
-    
+
     game.load.spritesheet('mrbean', 'assets/mrbean.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
 	game.load.image('boss_1', 'assets/BOSS.png', 256, 256);
