@@ -365,6 +365,8 @@ function controlHandler(){
 			fire();
 		}
 		ship.frame = 6;
+    }else{
+        ship.frame = 0;
     }
 }
 
