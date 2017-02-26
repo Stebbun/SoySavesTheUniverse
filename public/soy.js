@@ -274,7 +274,7 @@ function spawnEnemy(){
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
 		} else if(boss.keyWord == 'boss3'){
-			var baddie = enemies.create(boss.body.x + boss.body.width/4,boss.body.y + boss.body.height/2,'salt');
+			var baddie = enemies.create(boss.body.x + boss.body.width/4,boss.body.y + boss.body.height,'salt');
 			baddie.type = 6;
 			baddie.move = 0;
 			baddie.health = 5;
