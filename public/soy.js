@@ -44,7 +44,7 @@ var bosstype;
 
 var healthDrops;
 var burpSound;
-var guntype = 0;
+var guntype;
 var powerups;
 
 function preload() {
@@ -104,6 +104,10 @@ function create(){
 	isGGPrompted = false;
 	isRestart = false;
 	animInProgress = false;
+	finalBoss = false;
+	bossCount = 0;
+	bosstype = 0;
+	guntype = 0;
 
     //add music
     music = game.add.audio('soy_song');
