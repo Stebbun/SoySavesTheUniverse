@@ -335,7 +335,7 @@ function spawnBoss(){
 		boss.health = 250;
 		boss.shoot = 3;
 		game.physics.arcade.enable(boss);
-		boss.body.velocity.x = 300;
+		boss.body.velocity.x = 100;
         boss.keyWord = 'boss3';
 		bosstype = 4;
     }
@@ -758,22 +758,22 @@ function enemyfire(enemy){
 	} else if(enemy.type == 6){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = 20;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = -10;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = +10;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = -20;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = +25;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
 		minifood.body.velocity.x = -25;
-		minifood.body.velocity.y = 30;
+		minifood.body.velocity.y = 60;
 	}else {
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
 		minifood.body.velocity.y = 100;

@@ -26,6 +26,8 @@ var soyMilks;
 var soyBeans;
 var isDead;
 var pelletPtr;
+var finalBoss = false;
+var bossCount = 0;
 
 var enemies;
 var enemySpawnTimer;
@@ -69,6 +71,7 @@ function preload() {
 	game.load.image('hotdog', 'assets/HotDog.png');
 	game.load.image('hotdog_projectile', 'assets/HotDog_Projectile.png');
 
+	
     game.load.spritesheet('mrbean', 'assets/mrbeansprite.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
     game.load.image('soylent', 'assets/soylent.png');
@@ -77,8 +80,11 @@ function preload() {
 
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
-	
+	game.load.image('boss_3', 'assets/salt_bae.png');
+
 	game.load.image('tripleshot', 'assets/TripleGunDrop.png');
+	
+	game.load.image('salt','assets/salt.png')
 
 	game.load.image('gg', 'assets/game_over.png');
 }
@@ -246,21 +252,28 @@ function makeEnemyTimer(){
 function spawnEnemy(){
 	if (bosses.length===1){
 		boss = bosses.getTop();
-		if (boss.keyWord=='boss1'){
-			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+		if (boss.keyWord=='boss1' && boss.frame != 0){
+			var baddie = enemies.create(boss.body.x + boss.body.width/3,boss.body.y + boss.body.height,'burger');
 			baddie.type = 2;
 			baddie.move = 0;
 			baddie.health = 5;
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
-		} else if (boss.keyWord == 'boss2'){
-			var baddie = enemies.create(boss.body.x,boss.body.y,'fry_boss');
+		} else if (boss.keyWord == 'boss2' && boss.frame != 0){
+			var baddie = enemies.create(boss.body.x + boss.body.width/2,boss.body.y + boss.body.height,'fry_boss');
 			baddie.type = 5;
 			baddie.move = 0;
 			baddie.health = 5;
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
-		} 
+		} else if(boss.keyWord == 'boss3'){
+			var baddie = enemies.create(boss.body.x + boss.body.width/4,boss.body.y + boss.body.height/2,'salt');
+			baddie.type = 6;
+			baddie.move = 0;
+			baddie.health = 5;
+			baddie.shoot = 3;
+			game.physics.arcade.enable(baddie);
+		}
 	}
 	if(gameStarted && enemyCount < 10){
 		var rand = Math.floor(Math.random()*3)
@@ -287,31 +300,46 @@ function spawnEnemy(){
 
 function spawnBoss(){
 	if (bosstype === 4){
-		bosstype = 4;
-	} else if (score >= 1000 && score <= 1500 && bosses.length===0){
+	} else if (score >= 800 && bossCount<1 && bosses.length===0){
 		bosstype = 1;
-	} else if(score>=2000 && bosses.length == 0){
+	} else if(score>=1000 && bossCount<2 && bosses.length == 0){
         bosstype = 2;
-    }
+    } else if(score >= 3600 && bossCount<3 &&bossCount != 1 && bosses.length == 0){
+		bosstype = 3;
+		enemies.removeAll();
+		finalBoss = true;
+	}
 	if (gameStarted && bosstype===1){
 		var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_1',0);
+		bossCount++;
 		boss.health = 100;
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
-		boss.animations.add('boss1',[0,1,2], 5, true);
+		boss.animations.add('boss1',[0,1,2], 0.5, true);
         boss.keyWord = 'boss1';
 		bosstype = 0;
 	}else if(gameStarted && bosstype==2){
+		bossCount++;
         var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_2',0);
 		boss.health = 100;
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
-		boss.animations.add('boss2',[0,1,2], 5, true);
+		boss.animations.add('boss2',[0,1,2], 0.5, true);
         boss.keyWord = 'boss2';
 		bosstype = 0;
+    }else if(gameStarted && bosstype==3){
+		bossCount++;
+        var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_3',0);
+		boss.health = 250;
+		boss.shoot = 3;
+		game.physics.arcade.enable(boss);
+		boss.body.velocity.x = 300;
+        boss.keyWord = 'boss3';
+		bosstype = 4;
     }
+
 }
 
 function makeProjectiles(){
@@ -378,6 +406,8 @@ function update(){
 		if(!isGGPrompted)
 			promptGG();
 		if(spaceKey.isDown && isRestart){
+			ship.frame = 0;
+			guntype = 0;
 			restart();
 		}
     }
@@ -462,9 +492,13 @@ function damageBoss(soyBottle, boss){
 	if (boss.health==0){
 		boss.type
 		if (boss.keyWord == 'boss2'){
-			bosstype = 4;
+//			bosstype = 4;
 			var gun = powerups.create(boss.body.x,boss.body.y,'tripleshot');
 			gun.body.velocity.y = 100;
+		}else if(boss.keyWord == 'boss3'){
+			if(boss.length != 1){
+				finalBoss = false;
+			}
 		}
 		burpSound.play();
 		bosses.remove(boss);
@@ -608,6 +642,11 @@ function enemyMovementHandler(){
 					enemy.body.velocity.x = Math.random()*200-100;
 				}
 				enemy.body.velocity.y = 200;
+			}else if(enemy.type == 6){
+				if (enemy.body.velocity.x ===0){
+					enemy.body.velocity.x = Math.random()*200-100;
+				}
+				enemy.body.velocity.y = 200;
 			} else {
 				enemy.body.velocity.x = Math.random()*200-100;
 				enemy.body.velocity.y = Math.random()*200-100;
@@ -626,40 +665,27 @@ function bossMovementHandler(){
 	bosses.forEach(function(boss){
         if(boss.keyWord == 'boss2'){
             speed = 300;
-        }
-		boss.animations.play(boss.keyWord);
+        }else if(boss.keyWord == 'boss3'){
+			speed = 350;
+		}
+		if(boss.keyWord!='boss3'){
+			boss.animations.play(boss.keyWord);
+		}
+		var rand = Math.floor(Math.random()*20)
+		if(rand == 3){
+			boss.body.velocity.x = -1* speed;
+		}
 		if (boss.body.x<100){
 			boss.body.velocity.x = speed;
-		} else if (boss.body.x > 600) {
+		}else if (boss.body.x > 600) {
 			boss.body.velocity.x = -1 * speed;
 		}
 	}, this);
 }
 function controlHandler(){
-    if(isDead){
+	if(isDead){
         return;
     }
-    //remove this comment after adding animations
-    if(cursors.left.isDown){
-        ship.body.velocity.x = -300;
-    }
-    else if(cursors.right.isDown){
-        ship.body.velocity.x = 300;
-    }
-    if(cursors.up.isDown){
-        ship.body.velocity.y = -300;
-    }
-    else if(cursors.down.isDown){
-        ship.body.velocity.y = 300;
-    }
-    else{
-        // idle
-        if(!isDead && !animInProgress){
-            ship.animations.stop();
-            ship.frame = 0;
-        }
-    }
-
 	if(spaceKey.isDown){
 		if(!isDead){
 			fire();
@@ -676,6 +702,19 @@ function controlHandler(){
 			 ship.frame = 0;
 		}
     }
+    //remove this comment after adding animations
+    if(cursors.left.isDown){
+        ship.body.velocity.x = -300;
+    }
+    if(cursors.right.isDown){
+        ship.body.velocity.x = 300;
+    }
+    if(cursors.up.isDown){
+        ship.body.velocity.y = -300;
+    }
+    if(cursors.down.isDown){
+        ship.body.velocity.y = 300;
+	}
 }
 
 function fire(){
@@ -716,7 +755,26 @@ function enemyfire(enemy){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
 		minifood.body.velocity.x = -60;
 		minifood.body.velocity.y = 400;
-	} else {
+	} else if(enemy.type == 6){
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = 20;
+		minifood.body.velocity.y = 30;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = -10;
+		minifood.body.velocity.y = 30;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = +10;
+		minifood.body.velocity.y = 30;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = -20;
+		minifood.body.velocity.y = 30;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = +25;
+		minifood.body.velocity.y = 30;
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'salt');
+		minifood.body.velocity.x = -25;
+		minifood.body.velocity.y = 30;
+	}else {
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
 		minifood.body.velocity.y = 100;
 	}
