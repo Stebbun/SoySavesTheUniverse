@@ -199,7 +199,7 @@ function makeHealthBar(){
 }
 
 function makeScoreLabel(){
-    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#FFF' });
+    scoreText = game.add.text(16, 16, 'Score: 0', { fontSize: '32px', fill: '#FFF' });
 }
 
 function makeInitEnemies(){
