@@ -47,6 +47,7 @@ function preload() {
 }
 
 function create(){
+    var j = 4;
     //initialize variables
     gameStarted = true;
     fireRate = 100;
@@ -268,7 +269,7 @@ function enemyMovementHandler(){
 		enemy.shoot--;
 		if (enemy.shoot==0){
 			enemyfire(enemy);
-			enemy.shoot = 200;
+			enemy.shoot = 250;
 		}
     }, this);
 }
