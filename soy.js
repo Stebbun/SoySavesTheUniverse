@@ -148,6 +148,7 @@ function makeEnemyTimer(){
 }
 
 function spawnEnemy(){
+	
     if(gameStarted && enemyCount < 10){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
@@ -193,15 +194,6 @@ function makeProjectiles(){
 	enemyProjectiles.createMultiple(10,'hotdog_projectile');
 	enemyProjectiles.setAll('checkWorldBounds',true);
 	enemyProjectiles.setAll('outOfBoundsKill',true);
-	
-	bossProjectiles = game.add.group();
-	bossProjectiles.enableBody = true;
-	bossProjectiles.physicsBodyType = Phaser.Physics.ARCADE;
-	
-	bossProjectiles.createMultiple(10, 'burger_projectile');
-	bossProjectiles.createMultiple(10, 'hotdog_projectile');
-	bossProjectiles.setAll('checkWorldBounds', true);
-	bossProjectiles.setAll('outOfBoundsKill', true);
 
     soyBottles = game.add.group();
     soyBottles.enableBody = true;
@@ -307,7 +299,6 @@ function enemyMovementHandler(){
 		}
     }, this);
 }
-
 function bossMovementHandler(){
 	bosses.forEach(function(boss){
 		boss.animations.play('boss1');
@@ -315,6 +306,12 @@ function bossMovementHandler(){
 			boss.body.velocity.x = 200;
 		} else if (boss.body.x > 600) {
 			boss.body.velocity.x = -200;
+		}
+		boss.shoot--;
+		if (boss.shoot===0){
+			if (Math.floor(Math.random())==0){
+				
+			}
 		}
 	}, this);
 }
