@@ -636,24 +636,6 @@ function bossMovementHandler(){
 	}, this);
 }
 function controlHandler(){
-
-	if(spaceKey.isDown){
-		if(!isDead){
-			fire();
-		}
-		if (guntype===1){
-			ship.frame = 8;
-		} else {
-			ship.frame = 6;
-		}
-    }else{
-		if (guntype===1){
-			ship.frame = 8;
-		} else{
-			 ship.frame = 0;
-		}
-    }
-
     if(isDead){
         return;
     }
@@ -676,6 +658,23 @@ function controlHandler(){
             ship.animations.stop();
             ship.frame = 0;
         }
+    }
+
+	if(spaceKey.isDown){
+		if(!isDead){
+			fire();
+		}
+		if (guntype===1){
+			ship.frame = 8;
+		} else {
+			ship.frame = 6;
+		}
+    }else{
+		if (guntype===1){
+			ship.frame = 8;
+		} else{
+			 ship.frame = 0;
+		}
     }
 }
 
