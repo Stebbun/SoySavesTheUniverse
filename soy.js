@@ -48,7 +48,7 @@ function preload() {
 
 function create(){
     //initialize variables
-    gameStarted = true;
+    gameStarted = false;
     fireRate = 100;
     nextFireTime = 0;
     enemyCount = 0;
@@ -129,7 +129,7 @@ function makeEnemyTimer(){
 }
 
 function spawnEnemy(){
-    if(enemyCount < 10){
+    if(gameStarted && enemyCount < 10){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
@@ -202,7 +202,6 @@ function startGame(){
 
 
 function update(){
-    startGame();
     game.physics.arcade.overlap(soyBottles, enemies, damageEnemy,null,this);
     //game.physics.arcade.collide(collisionShip,enemies);
     //damagePlayer(collisionShip,enemies);
