@@ -62,7 +62,7 @@ function preload() {
     game.load.image('soylent', 'assets/soylent.png');
 
 
-	game.load.spritesheet('boss_1', 'assets/BOSS.png', 256, 256);
+	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
 }
 
@@ -278,18 +278,6 @@ function spawnBoss(){
 		boss.animations.add('boss2',[0,1,2], 5, true);
         boss.keyWord = 'boss2';
 		bosstype = 0;
-    }
-}
-function spawnFriesBoss(){
-    if(gameStarted && enemyCount < 10){
-		if (Math.floor(Math.random()*2)==0){
-			var baddie = enemies.create( (Math.random() *5) *160, 0, 'fry_boss');
-			baddie.type = 4;
-		}
-		baddie.health = 10;
-		baddie.shoot = 50;
-        enemyCount++;
-		game.physics.arcade.enable(baddie);
     }
 }
 
