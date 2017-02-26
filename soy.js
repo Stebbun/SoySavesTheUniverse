@@ -49,8 +49,10 @@ function preload() {
 	
 	game.load.image('hotdog', 'assets/HotDog.png');
 	game.load.image('hotdog_projectile', 'assets/HotDog_Projectile.png');
-	
-	game.load.image('boss_1', 'assets/BOSS.png');
+    
+    game.load.spritesheet('mrbean', 'assets/mrbean.png', 200, 221);
+    game.load.image('titlescreen', 'assets/title_screen.png');
+	game.load.image('boss_1', 'assets/BOSS.png', 256, 256);
 }
 
 function create(){
@@ -166,14 +168,15 @@ function spawnEnemy(){
 }
 
 function spawnBoss(){
-	if (score >= 1000 && score <= 2000){
+	if (score >= 1000 && score <= 2000 && bosses.length===0){
 		bosstype = 1;
 	}
 	if (gameStarted && bosstype===1){
-		var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_1');
+		var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_1',0);
 		boss.health = 100;
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
+		boss.body.velocity.x = 200;
 		bosstype = 0;
 	}
 }
@@ -308,7 +311,7 @@ function bossMovementHandler(){
 	bosses.forEach(function(boss){
 		if (boss.body.x<100){
 			boss.body.velocity.x = 200;
-		} else if (boss.body.x > 700) {
+		} else if (boss.body.x > 600) {
 			boss.body.velocity.x = -200;
 		}
 	}, this);
