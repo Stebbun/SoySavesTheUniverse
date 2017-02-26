@@ -52,7 +52,7 @@ function preload() {
 
     game.load.spritesheet('mrbean', 'assets/mrbean.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
-	game.load.image('boss_1', 'assets/BOSS.png', 256, 256);
+	game.load.spritesheet('boss_1', 'assets/BOSS.png', 256, 256);
 }
 
 function create(){
@@ -177,6 +177,7 @@ function spawnBoss(){
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
+		boss.animations.add('boss1',[0,1,2], 5, true);
 		bosstype = 0;
 	}
 }
@@ -309,6 +310,7 @@ function enemyMovementHandler(){
 
 function bossMovementHandler(){
 	bosses.forEach(function(boss){
+		boss.animations.play('boss1');
 		if (boss.body.x<100){
 			boss.body.velocity.x = 200;
 		} else if (boss.body.x > 600) {
