@@ -10,6 +10,9 @@ var healthFore;
 var mrBeanGoLeft;
 var promptVisible;
 var emitter;
+var isGGPrompted;
+var ggPrompt;
+var isRestart;
 
 var ship;
 
@@ -79,6 +82,8 @@ function create(){
     enemyCount = 0;
 	score = 0;
     promptVisible = true;
+	isGGPrompted = false;
+	isRestart = false;
 
     //add music
     music = game.add.audio('soy_song');
@@ -344,7 +349,9 @@ function update(){
         collisionShip.y = ship.y+10;
     }else{
         ship.animations.play('death');
-		if(spaceKey.isDown){
+		if(!isGGPrompted)
+			promptGG();
+		if(spaceKey.isDown && isRestart){
 			restart();
 		}
     }
@@ -367,6 +374,21 @@ function update(){
                 mrBeanGoLeft = true;
         }
     }
+}
+
+function promptGG(){
+	ggPrompt = game.add.sprite(game.world.centerX-200, game.world.centerY-40, 'gg');
+	ggPrompt.scale.setTo(0.5, 0.5);
+	isGGPrompted = true;
+
+	restartTimer = game.time.create(false);
+	restartTimer.loop(2000, toggleIsRestart, this);
+	restartTimer.start();
+}
+
+function toggleIsRestart(){
+	if(!isRestart)
+		isRestart = true;
 }
 
 function restart(){
