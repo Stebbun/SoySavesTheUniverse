@@ -62,7 +62,7 @@ function preload() {
     game.load.image('soylent', 'assets/soylent.png');
 
 
-	game.load.spritesheet('boss_1', 'assets/BOSS.png', 256, 256);
+	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
 }
 
@@ -240,7 +240,7 @@ function spawnEnemy(){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'hotdog'); 
 			baddie.type = 1;
 		} else if (score >=3000 && rand == 2){
-			var baddie = enemies.create( (Math.random() *5) *160, 0, 'fry_boss'); 
+			var baddie = enemies.create( (Math.random() *5) *160, 250, 'fry_boss'); 
 			baddie.type = 4;
 		} else {
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
@@ -257,7 +257,7 @@ function spawnEnemy(){
 function spawnBoss(){
 	if (bosstype === 4){
 		bosstype = 4;
-	} else if (score >= 1000 && score <= 2000 && bosses.length===0){
+	} else if (score >= 1000 && score <= 1500 && bosses.length===0){
 		bosstype = 1;
 	} else if(score>=2000 && bosses.length == 0){
         bosstype = 2;
@@ -280,18 +280,6 @@ function spawnBoss(){
 		boss.animations.add('boss2',[0,1,2], 5, true);
         boss.keyWord = 'boss2';
 		bosstype = 0;
-    }
-}
-function spawnFriesBoss(){
-    if(gameStarted && enemyCount < 10){
-		if (Math.floor(Math.random()*2)==0){
-			var baddie = enemies.create( (Math.random() *5) *160, 0, 'fry_boss');
-			baddie.type = 4;
-		}
-		baddie.health = 10;
-		baddie.shoot = 50;
-        enemyCount++;
-		game.physics.arcade.enable(baddie);
     }
 }
 
@@ -400,6 +388,26 @@ function damageEnemy(soyBottle,enemy){
     soyBottle.kill();
     enemy.health -= 1;
     if(enemy.health == 0){
+		if (enemy.type == 4 || enemy.type == 5){
+			 var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = 0;
+			minifood.body.velocity.y = 300;
+			var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = 300;
+			minifood.body.velocity.y = 300;
+			var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = -300;
+			minifood.body.velocity.y = 300; 
+			var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = 0;
+			minifood.body.velocity.y = -300;
+			var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = 300;
+			minifood.body.velocity.y = -300;
+			var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
+			minifood.body.velocity.x = -300;
+			minifood.body.velocity.y = -300;
+		}
         enemy.kill();
 		enemies.remove(enemy);
 		score += 100;
@@ -539,10 +547,10 @@ function enemyfire(enemy){
 		minifood.body.velocity.x = 0;
 		minifood.body.velocity.y = 400;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
-		minifood.body.velocity.x = 40;
+		minifood.body.velocity.x = 60;
 		minifood.body.velocity.y = 400;
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
-		minifood.body.velocity.x = -40;
+		minifood.body.velocity.x = -60;
 		minifood.body.velocity.y = 400;
 	} else {
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
