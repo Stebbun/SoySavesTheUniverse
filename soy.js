@@ -149,8 +149,21 @@ function makeEnemyTimer(){
 }
 
 function spawnEnemy(){
-	
-    if(gameStarted && enemyCount < 10){
+	if (boss.keyWord=='boss1'){
+		var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+		baddie.type = 2;
+		baddie.move = 0;
+		baddie.health = 5;
+		baddie.shoot = 50;
+		game.physics.arcade.enable(baddie);
+	} else if (boss.keyWord == 'boss2'){
+		var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+		baddie.type = 2;
+		baddie.move = 0;
+		baddie.health = 5;
+		baddie.shoot = 50;
+		game.physics.arcade.enable(baddie);
+	} else if(gameStarted && enemyCount < 10){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
