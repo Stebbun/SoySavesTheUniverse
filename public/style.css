@@ -1,0 +1,13 @@
+body {
+    background: #000000;
+      width:100%
+}
+/*center canvas*/
+canvas {
+    margin: auto;
+}
+#container {
+    top: 5%;
+    left: 100px;
+    position: absolute;
+}
