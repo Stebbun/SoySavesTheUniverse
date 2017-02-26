@@ -271,7 +271,7 @@ function enemyMovementHandler(){
 		enemy.shoot--;
 		if (enemy.shoot==0){
 			enemyfire(enemy);
-			enemy.shoot = 200;
+			enemy.shoot = 250;
 		}
     }, this);
 }
