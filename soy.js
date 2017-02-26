@@ -152,7 +152,25 @@ function makeEnemyTimer(){
 }
 
 function spawnEnemy(){
-    if(gameStarted && enemyCount < 10){
+	if (bosses.length===1){
+		boss = bosses.getTop();
+		if (boss.keyWord=='boss1'){
+			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+			baddie.type = 2;
+			baddie.move = 0;
+			baddie.health = 5;
+			baddie.shoot = 50;
+			game.physics.arcade.enable(baddie);
+		} else if (boss.keyWord == 'boss2'){
+			var baddie = enemies.create(boss.body.x,boss.body.y,'burger');
+			baddie.type = 2;
+			baddie.move = 0;
+			baddie.health = 5;
+			baddie.shoot = 50;
+			game.physics.arcade.enable(baddie);
+		} 
+	}
+	if(gameStarted && enemyCount < 10){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
@@ -221,15 +239,6 @@ function makeProjectiles(){
 	enemyProjectiles.createMultiple(10,'hotdog_projectile');
 	enemyProjectiles.setAll('checkWorldBounds',true);
 	enemyProjectiles.setAll('outOfBoundsKill',true);
-	
-	bossProjectiles = game.add.group();
-	bossProjectiles.enableBody = true;
-	bossProjectiles.physicsBodyType = Phaser.Physics.ARCADE;
-	
-	bossProjectiles.createMultiple(10, 'burger_projectile');
-	bossProjectiles.createMultiple(10, 'hotdog_projectile');
-	bossProjectiles.setAll('checkWorldBounds', true);
-	bossProjectiles.setAll('outOfBoundsKill', true);
 
     soyBottles = game.add.group();
     soyBottles.enableBody = true;
@@ -324,9 +333,16 @@ function enemyMovementHandler(){
 				enemy.body.velocity.y = Math.random()*-100;
 			}
 		} else {
-			enemy.body.velocity.x = Math.random()*200-100;
-			enemy.body.velocity.y = Math.random()*200-100;
-			enemy.move = Math.floor(Math.random()*50+20);
+			if (enemy.type===2){
+				if (enemy.body.velocity.x === 0){
+					enemy.body.velocity.x = Math.random()*200-100;
+				}
+				enemy.body.velocity.y = 100;
+			} else {
+				enemy.body.velocity.x = Math.random()*200-100;
+				enemy.body.velocity.y = Math.random()*200-100;
+				enemy.move = Math.floor(Math.random()*50+20);
+			}
 		}
 		enemy.shoot--;
 		if (enemy.shoot==0){
@@ -335,7 +351,6 @@ function enemyMovementHandler(){
 		}
     }, this);
 }
-
 function bossMovementHandler(){
     speed = 200;
 	bosses.forEach(function(boss){
@@ -347,6 +362,12 @@ function bossMovementHandler(){
 			boss.body.velocity.x = speed;
 		} else if (boss.body.x > 600) {
 			boss.body.velocity.x = -1 * speed;
+		}
+		boss.shoot--;
+		if (boss.shoot===0){
+			if (Math.floor(Math.random())==0){
+				
+			}
 		}
 	}, this);
 }
@@ -406,6 +427,8 @@ function enemyfire(enemy){
         var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
 		minifood.body.velocity.x = 0;
 		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*1.5;
-    }
-	
+	} else {
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
+		minifood.body.velocity.y = 100;
+	}
 }
