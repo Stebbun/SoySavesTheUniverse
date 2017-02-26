@@ -181,6 +181,8 @@ function makeHealthBar(){
 	//healthFore.width = game.width;
     manaBack = game.add.sprite(game.width-32, game.world.height-256-32, 'mana_back');
     manaFore = game.add.sprite(game.width-32, game.world.height-256-32, 'mana_fore');
+    manaFore.y += 256;
+    manaFore.height = 0;
 
 }
 
@@ -397,6 +399,12 @@ function damageBoss(soyBottle, boss){
 }
 function damageEnemy(soyBottle,enemy){
     soyBottle.kill();
+    manaFore.height += 3; 
+    manaFore.y -=3;
+    if(manaFore.height >= 256){
+        manaFore.height = 0;
+        manaFore.y += 256;
+    }
     enemy.health -= 1;
     if(enemy.health == 0){
 		if (enemy.type == 4 || enemy.type == 5){
