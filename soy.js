@@ -83,7 +83,7 @@ function makeInitEnemies(){
 
     for(var i = 0; i < 5; i++){
         var baddie = enemies.create(i*160, 0, 'burger');
-		baddie.move = Math.floor(Math.random()*50+20);
+		baddie.move = 0;
 		baddie.health = 5;
 		game.physics.arcade.enable(baddie);
         enemyCount++;
@@ -101,7 +101,7 @@ function makeEnemyTimer(){
 function spawnEnemy(){
     if(enemyCount < 10){
         var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
-		baddie.move = Math.floor(Math.random()*50+20);
+		baddie.move = 0;
 		baddie.health = 5;
         enemyCount++;
 		game.physics.arcade.enable(baddie);
@@ -204,8 +204,14 @@ function enemyMovementHandler(){
 			} else if (enemy.body.x>700){
 				enemy.body.velocity.x = Math.random()*-100;
 			}
+			if (enemy.body.y<100){
+				enemy.body.velocity.y = Math.random()*100;
+			} else if (enemy.body.y>300){
+				enemy.body.velocity.y = Math.random()*-100;
+			}
 		} else {
 			enemy.body.velocity.x = Math.random()*200-100;
+			enemy.body.velocity.y = Math.random()*200-100;
 			enemy.move = Math.floor(Math.random()*50+20);
 		}
     }, this);
