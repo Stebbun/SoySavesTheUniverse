@@ -1,11 +1,15 @@
 var game = new Phaser.Game(800, 800, Phaser.AUTO, '', { preload: preload, create: create, update: update });
 var music;
 
+var titleScreen;
 var gameStarted;
 var score;
 var scoreText;
 var healthBack;
 var healthFore;
+var mrBeanGoLeft;
+var promptVisible;
+var emitter;
 
 var ship;
 
@@ -35,7 +39,7 @@ var bosstype=0;
 function preload() {
     game.load.spritesheet('ship', 'assets/Ship.png', 64, 64);
     game.load.image('sky', 'assets/space_background.png');
-    //game.load.image('soybean', 'assets/sky.png');
+    game.load.image('soybean', 'assets/soybean.png');
     //game.load.image('soymilk', 'assets/sky.png');
 	game.load.image('colShip', 'assets/collisionShip.png');
     game.load.image('soybottle', 'assets/Ship_Projectile.png');
@@ -50,8 +54,11 @@ function preload() {
 	game.load.image('hotdog', 'assets/HotDog.png');
 	game.load.image('hotdog_projectile', 'assets/HotDog_Projectile.png');
 
-    game.load.spritesheet('mrbean', 'assets/mrbean.png', 200, 221);
+    game.load.spritesheet('mrbean', 'assets/mrbeansprite.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
+    game.load.image('soylent', 'assets/soylent.png');
+
+
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 256, 256);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
 }
@@ -64,6 +71,7 @@ function create(){
     nextFireTime = 0;
     enemyCount = 0;
 	score = 0;
+    promptVisible = true;
 
     //add music
     music = game.add.audio('soy_song');
@@ -104,6 +112,57 @@ function create(){
 	makeScoreLabel();
 
     makeHealthBar();
+
+    makeTitleScreen();
+
+    makeItRainSoy();
+}
+
+function makeItRainSoy(){
+    emitter = game.add.emitter(game.world.centerX, 0, 400);
+    emitter.width = game.world.width;
+    emitter.makeParticles('soybean');
+
+    emitter.minParticleScale = 0.1;
+	emitter.maxParticleScale = 0.5;
+
+	emitter.setYSpeed(300, 500);
+	emitter.setXSpeed(-5, 5);
+
+	emitter.minRotation = 0;
+	emitter.maxRotation = 0;
+
+	emitter.start(false, 1600, 5, 0);
+}
+
+function makeTitleScreen(){
+    titleElements = game.add.group();
+    titleScreen = titleElements.create(0, 0, 'titlescreen');
+    mrBean = titleElements.create(game.world.width-200, game.world.height-221, 'mrbean');
+    mrBean.animations.add('idle', [0,1], 10, true);
+    game.physics.arcade.enable(mrBean);
+    mrBeanGoLeft = true;
+    soylent = titleElements.create(game.world.width-300, game.world.height-205, 'soylent');
+    game.physics.arcade.enable(soylent);
+
+    playPrompt = game.add.text(game.world.width/2 - 150, game.world.height/2, 'SPACEBAR TO PLAY', { fontSize: '32px', fill: '#FFF' });
+    promptTimer = game.time.create(false);
+    titleElements.add(playPrompt);
+
+    promptTimer.loop(600, blinkText, this);
+
+    promptTimer.start();
+}
+
+function blinkText(){
+    if(promptVisible === true){
+        promptVisible = false;
+        playPrompt.visible = false;
+    }
+    else{
+        promptVisible = true;
+        playPrompt.visible = true;
+    }
 }
 
 function makeHealthBar(){
@@ -240,6 +299,8 @@ function makeKeys(){
 function startGame(){
     gameStarted = true;
     game.input.onDown.remove(startGame, spaceKey);
+    titleElements.removeAll();
+    emitter.removeAll();
 }
 
 
@@ -258,6 +319,21 @@ function update(){
     
     if(gameStarted){
         gameplay();
+    }
+    else{
+        mrBean.animations.play('idle');
+        if(mrBeanGoLeft === true){
+            mrBean.body.velocity.x = -150;
+            soylent.body.velocity.x = -150;
+            if(mrBean.body.x == 100)
+                mrBeanGoLeft = false;
+        }
+        else{
+            mrBean.body.velocity.x = 150;
+            soylent.body.velocity.x = 150;
+            if(mrBean.body.x == game.world.width - 200)
+                mrBeanGoLeft = true;
+        }
     }
 }
 function damagePlayer(collisionShip,enemy){
