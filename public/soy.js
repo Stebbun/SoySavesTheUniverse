@@ -254,7 +254,7 @@ function spawnEnemy(){
 			baddie.shoot = 50;
 			game.physics.arcade.enable(baddie);
 		} else if (boss.keyWord == 'boss2'){
-			var baddie = enemies.create(boss.body.x,boss.body.y,'fry_boss');
+			var baddie = enemies.create(boss.body.x + boss.body.width/2,boss.body.y + boss.body.height,'fry_boss');
 			baddie.type = 5;
 			baddie.move = 0;
 			baddie.health = 5;
@@ -290,7 +290,7 @@ function spawnBoss(){
 		bosstype = 4;
 	} else if (score >= 1000 && score <= 1500 && bosses.length===0){
 		bosstype = 1;
-	} else if(score>=2000 && bosses.length == 0){
+	} else if(score>=1700 && bosses.length == 0){
         bosstype = 2;
     }
 	if (gameStarted && bosstype===1){
@@ -299,7 +299,7 @@ function spawnBoss(){
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
-		boss.animations.add('boss1',[0,1,2], 5, true);
+		boss.animations.add('boss1',[0,1,2], 0.5, true);
         boss.keyWord = 'boss1';
 		bosstype = 0;
 	}else if(gameStarted && bosstype==2){
@@ -308,7 +308,7 @@ function spawnBoss(){
 		boss.shoot = 30;
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
-		boss.animations.add('boss2',[0,1,2], 5, true);
+		boss.animations.add('boss2',[0,1,2], 0.5, true);
         boss.keyWord = 'boss2';
 		bosstype = 0;
     }
@@ -628,9 +628,13 @@ function bossMovementHandler(){
             speed = 300;
         }
 		boss.animations.play(boss.keyWord);
+		var rand = Math.floor(Math.random()*20)
+		if(rand == 3){
+			boss.body.velocity.x = -1* speed;
+		}
 		if (boss.body.x<100){
 			boss.body.velocity.x = speed;
-		} else if (boss.body.x > 600) {
+		}else if (boss.body.x > 600) {
 			boss.body.velocity.x = -1 * speed;
 		}
 	}, this);
