@@ -53,6 +53,7 @@ function preload() {
     game.load.spritesheet('mrbean', 'assets/mrbean.png', 200, 221);
     game.load.image('titlescreen', 'assets/title_screen.png');
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 256, 256);
+    game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
 }
 
 function create(){
@@ -171,7 +172,9 @@ function spawnEnemy(){
 function spawnBoss(){
 	if (score >= 1000 && score <= 2000 && bosses.length===0){
 		bosstype = 1;
-	}
+	}else if(score>=2500&&3500 && bosses.length == 1){
+        bosstype = 2;
+    }
 	if (gameStarted && bosstype===1){
 		var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_1',0);
 		boss.health = 100;
@@ -179,8 +182,18 @@ function spawnBoss(){
 		game.physics.arcade.enable(boss);
 		boss.body.velocity.x = 200;
 		boss.animations.add('boss1',[0,1,2], 5, true);
+        boss.keyWord = 'boss1';
 		bosstype = 0;
-	}
+	}else if(gameStarted &&bosstype==2){
+        var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_2',0);
+		boss.health = 100;
+		boss.shoot = 30;
+		game.physics.arcade.enable(boss);
+		boss.body.velocity.x = 200;
+		boss.animations.add('boss2',[0,1,2], 5, true);
+        boss.keyWord = 'boss2';
+		bosstype = 0;
+    }
 }
 
 
@@ -300,12 +313,16 @@ function enemyMovementHandler(){
     }, this);
 }
 function bossMovementHandler(){
+    speed = 200;
 	bosses.forEach(function(boss){
-		boss.animations.play('boss1');
+        if(boss.keyWord == 'boss2'){
+            speed = 300;
+        }
+		boss.animations.play(boss.keyWord);
 		if (boss.body.x<100){
-			boss.body.velocity.x = 200;
+			boss.body.velocity.x = speed;
 		} else if (boss.body.x > 600) {
-			boss.body.velocity.x = -200;
+			boss.body.velocity.x = -1 * speed;
 		}
 		boss.shoot--;
 		if (boss.shoot===0){
