@@ -95,10 +95,10 @@ function create(){
 }
 
 function makeHealthBar(){
-    healthBack = game.add.sprite(2, game.world.height - 512, 'health_back');
-    healthFore = game.add.sprite(2, game.world.height - 512, 'health_fore');
-    healthBack.scale.setTo(1, 2);
-    healthFore.scale.setTo(1, 2);
+    healthBack = game.add.sprite(0, game.world.height-64, 'health_back');
+    healthFore = game.add.sprite(0, game.world.height-64, 'health_fore');
+	healthBack.width = game.width;
+	healthFore.width = game.width;
 }
 
 function makeScoreLabel(){
@@ -215,8 +215,8 @@ function update(){
     }
 }
 function damagePlayer(collisionShip,enemy){
-    ship.health = ship.health - (512/5);
-	healthFore.height = ship.health;
+    ship.health = ship.health - (512/5)
+	healthFore.width = game.width *(ship.health / 512);
     enemy.kill();
     if(ship.health <= 3){
         ship.kill();
