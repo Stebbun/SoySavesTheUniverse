@@ -110,7 +110,7 @@ function makeInitEnemies(){
         var baddie = enemies.create(i*160, 0, 'burger');
 		baddie.move = 0;
 		baddie.health = 5;
-		baddie.shoot = 50;
+		baddie.shoot = 200;
 		game.physics.arcade.enable(baddie);
         enemyCount++;
     }
@@ -158,7 +158,7 @@ function makeProjectiles(){
 	enemyProjectiles.enableBody = true;
 	enemyProjectiles.phyicsBodyType = Phaser.Physics.ARCADE;
 	
-	enemyProjectiles.createMultiple(50, 'burger_projectile');
+	enemyProjectiles.createMultiple(150, 'burger_projectile');
 	enemyProjectiles.setAll('checkWorldBounds',true);
 	enemyProjectiles.setAll('outOfBoundsKill',true);
 	
@@ -255,7 +255,7 @@ function enemyMovementHandler(){
 		enemy.shoot--;
 		if (enemy.shoot==0){
 			enemyfire(enemy);
-			enemy.shoot = 50;
+			enemy.shoot = 200;
 		}
     }, this);
 }
