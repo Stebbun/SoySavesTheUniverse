@@ -41,6 +41,8 @@ var bosstype=0;
 
 var healthDrops;
 var burpSound;
+var guntype = 0;
+var powerups;
 
 function preload() {
     game.load.spritesheet('ship', 'assets/Ship.png', 64, 64);
@@ -74,6 +76,8 @@ function preload() {
 
 	game.load.spritesheet('boss_1', 'assets/BOSS.png', 130, 183);
     game.load.spritesheet('boss_2', 'assets/Wendy_Boss.png', 256, 256);
+	
+	game.load.image('tripleshot', 'assets/TripleGunDrop.png');
 
 	game.load.image('gg', 'assets/game_over.png');
 }
@@ -208,7 +212,7 @@ function makeInitEnemies(){
 	bosses = game.add.group();
 	healthDrops = game.add.group();
 	healthDrops.enableBody = true;
-	healthDrops.phyicsBodyType = Phaser.Physics.ARCADE;
+	healthDrops.physicsBodyType = Phaser.Physics.ARCADE;
 
     for(var i = 0; i < 5; i++){
         var baddie = enemies.create(i*160, 0, 'burger');
@@ -311,7 +315,14 @@ function makeProjectiles(){
 	
 	enemyProjectiles = game.add.group();
 	enemyProjectiles.enableBody = true;
-	enemyProjectiles.phyicsBodyType = Phaser.Physics.ARCADE;
+	enemyProjectiles.physicsBodyType = Phaser.Physics.ARCADE;
+	
+	powerups = game.add.group();
+	powerups.enableBody = true;
+	powerups.physicsBodyType = Phaser.Physics.ARCADE;
+	
+	var gun = powerups.create(500,0,'tripleshot');
+	gun.body.velocity.y = 100;
 	
 	enemyProjectiles.createMultiple(10,'burger_projectile');
 	enemyProjectiles.createMultiple(10,'hotdog_projectile');
@@ -356,6 +367,7 @@ function update(){
 		game.physics.arcade.overlap(collisionShip, healthDrops, healPlayer, null, this);
         game.physics.arcade.overlap(collisionShip, enemies, damagePlayer,null,this);
         game.physics.arcade.overlap(collisionShip, enemyProjectiles, damagePlayer, null, this);
+		game.physics.arcade.overlap(collisionShip, powerups, buffPlayer ,null, this);
         collisionShip.x = ship.x+21;
         collisionShip.y = ship.y+10;
     }else{
@@ -407,6 +419,11 @@ function restart(){
     game.state.start(game.state.current);
 }
 
+function buffPlayer(collisionShip, powerup){
+	powerup.kill();
+	powerups.remove(powerup);
+	guntype = 1;
+}
 function healPlayer(collisionShip, health){
 	health.kill();
 	healthDrops.remove(health);
@@ -417,6 +434,7 @@ function damagePlayer(collisionShip,enemy){
     ship.health = ship.health - (512/5)
 	healthFore.width = game.width *(ship.health / 512);
     enemy.kill();
+	ship.frame = 4;
     if(ship.health <= 3){
         collisionShip.kill();
 		isDead = true;
@@ -430,6 +448,8 @@ function damageBoss(soyBottle, boss){
 		boss.type
 		if (boss.keyWord == 'boss2'){
 			bosstype = 4;
+			var gun = powerups.create(boss.body.x,boss.body.y,'tripleshot');
+			gun.body.velocity.y = 100;
 		}
 		burpSound.play();
 		bosses.remove(boss);
@@ -611,7 +631,7 @@ function controlHandler(){
     else if(cursors.right.isDown){
         ship.body.velocity.x = 300;
     }
-    else if(cursors.up.isDown){
+    if(cursors.up.isDown){
         ship.body.velocity.y = -300;
     }
     else if(cursors.down.isDown){
@@ -629,17 +649,36 @@ function controlHandler(){
 		if(!isDead){
 			fire();
 		}
-		ship.frame = 6;
+		if (guntype===1){
+			ship.frame = 8;
+		} else {
+			ship.frame = 6;
+		}
     }else{
-        ship.frame = 0;
+		if (guntype===1){
+			ship.frame = 8;
+		} else {
+			 ship.frame = 0;
+		}
     }
 }
 
 function fire(){
-	if(ship.firedelay==0){
+	if(ship.firedelay==0 && guntype===0){
 		var pellet = soyBottles.create(ship.x+16.5,ship.y,'soybottle');
 		pellet.body.velocity.y = -350;
 		ship.firedelay = 8;
+	} else if (ship.firedelay==0 && guntype===1){
+		var pellet = soyBottles.create(ship.x+16.5,ship.y,'soybottle');
+		pellet.body.velocity.x = 0;
+		pellet.body.velocity.y = -350;
+		var pellet = soyBottles.create(ship.x+20.5,ship.y,'soybottle');
+		pellet.body.velocity.x = 60;
+		pellet.body.velocity.y = -350;
+		var pellet = soyBottles.create(ship.x+12.5,ship.y,'soybottle');
+		pellet.body.velocity.x = -60;
+		pellet.body.velocity.y = -350;
+		ship.firedelay = 14;
 	}
 	ship.firedelay--;
 }
