@@ -26,8 +26,8 @@ var soyMilks;
 var soyBeans;
 var isDead;
 var pelletPtr;
-var finalBoss = false;
-var bossCount = 0;
+var finalBoss;
+var bossCount;
 
 var enemies;
 var enemySpawnTimer;
@@ -40,7 +40,7 @@ var spaceKey;
 var bosses;
 var bossSpawnTimer;
 var bossProjectiles;
-var bosstype=0;
+var bosstype;
 
 var healthDrops;
 var burpSound;
@@ -97,6 +97,9 @@ function create(){
     nextFireTime = 0;
     enemyCount = 0;
 	score = 0;
+	bossCount = 0;
+	bosstype = 0;
+	finalBoss = false;
     promptVisible = true;
 	isGGPrompted = false;
 	isRestart = false;
@@ -352,9 +355,6 @@ function makeProjectiles(){
 	powerups.enableBody = true;
 	powerups.physicsBodyType = Phaser.Physics.ARCADE;
 	
-	var gun = powerups.create(500,0,'tripleshot');
-	gun.body.velocity.y = 100;
-	
 	enemyProjectiles.createMultiple(10,'burger_projectile');
 	enemyProjectiles.createMultiple(10,'hotdog_projectile');
 	enemyProjectiles.setAll('checkWorldBounds',true);
@@ -448,6 +448,9 @@ function toggleIsRestart(){
 }
 
 function restart(){
+	score = 0;
+	bosstype = 0;
+	bossCount = 0;
 	music.stop();
     game.state.start(game.state.current);
 }
@@ -491,7 +494,7 @@ function damageBoss(soyBottle, boss){
 	boss.health--;
 	if (boss.health==0){
 		boss.type
-		if (boss.keyWord == 'boss2'){
+		if (boss.keyWord == 'boss1'){
 //			bosstype = 4;
 			var gun = powerups.create(boss.body.x,boss.body.y,'tripleshot');
 			gun.body.velocity.y = 100;
