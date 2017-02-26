@@ -16,7 +16,7 @@ var shipProjectiles;
 var soyBottles;
 var soyMilks;
 var soyBeans;
-
+var isDead;
 var pelletPtr;
 
 var enemies;
@@ -49,6 +49,7 @@ function preload() {
 function create(){
     //initialize variables
     gameStarted = false;
+	isDead = false;
     fireRate = 100;
     nextFireTime = 0;
     enemyCount = 0;
@@ -133,9 +134,12 @@ function spawnEnemy(){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
-		} else {
+		} else if (score>=2000){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'hotdog'); 
 			baddie.type = 1;
+		} else {
+			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
+			baddie.type = 0;
 		}
 		baddie.move = 0;
 		baddie.health = 5;
@@ -220,6 +224,7 @@ function damagePlayer(collisionShip,enemy){
     if(ship.health <= 3){
         ship.kill();
         collisionShip.kill();
+		isDead = true;
     }
 }
 function damageEnemy(soyBottle,enemy){
@@ -227,6 +232,7 @@ function damageEnemy(soyBottle,enemy){
     enemy.health -= 1;
     if(enemy.health == 0){
         enemy.kill();
+		enemies.remove(enemy);
 		score += 100;
         scoreText.text = 'Score: ' + score;
         enemyCount--;
@@ -292,7 +298,9 @@ function controlHandler(){
     }
 
     if(spaceKey.isDown){
-        fire();
+		if(!isDead){
+			fire();
+		}
 		ship.frame = 6;
     }
 }
@@ -312,7 +320,8 @@ function enemyfire(enemy){
 		minifood.body.velocity.y = 100;
 	} else if (enemy.type === 1){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'hotdog_projectile');
-		minifood.body.velocity.y = 100;
+		minifood.body.velocity.x = (collisionShip.x-enemy.body.x)*.9;
+		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*.9;
 	}
 	
 }
