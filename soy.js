@@ -163,7 +163,7 @@ function spawnEnemy(){
 			game.physics.arcade.enable(baddie);
 		} else if (boss.keyWord == 'boss2'){
 			var baddie = enemies.create(boss.body.x,boss.body.y,'fry_boss');
-			baddie.type = 2;
+			baddie.type = 5;
 			baddie.move = 0;
 			baddie.health = 5;
 			baddie.shoot = 50;
@@ -171,12 +171,16 @@ function spawnEnemy(){
 		} 
 	}
 	if(gameStarted && enemyCount < 10){
-		if (Math.floor(Math.random()*2)==0){
+		var rand = Math.floor(Math.random()*3)
+		if (rand==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
-		} else if (score>=2000){
+		} else if (score>=2000 && rand==1){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'hotdog'); 
 			baddie.type = 1;
+		} else if (score >=3000 && rand == 2){
+			var baddie = enemies.create( (Math.random() *5) *160, 0, 'fry_boss'); 
+			baddie.type = 4;
 		} else {
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
@@ -192,7 +196,7 @@ function spawnEnemy(){
 function spawnBoss(){
 	if (score >= 1000 && score <= 2000 && bosses.length===0){
 		bosstype = 1;
-	}else if(score>=2000&&3500 && bosses.length == 1){
+	}else if(score>=2000&&3500 && bosses.length == 0){
         bosstype = 2;
     }
 	if (gameStarted && bosstype===1){
@@ -204,7 +208,7 @@ function spawnBoss(){
 		boss.animations.add('boss1',[0,1,2], 5, true);
         boss.keyWord = 'boss1';
 		bosstype = 0;
-	}else if(gameStarted &&bosstype==2){
+	}else if(gameStarted && bosstype==2){
         var boss = bosses.create( (Math.random() *5) *160, 0, 'boss_2',0);
 		boss.health = 100;
 		boss.shoot = 30;
@@ -268,6 +272,7 @@ function startGame(){
 
 function update(){
     game.physics.arcade.overlap(soyBottles, enemies, damageEnemy,null,this);
+	game.physics.arcade.overlap(soyBottles, bosses, damageBoss,null,this);
     //game.physics.arcade.collide(collisionShip,enemies);
     //damagePlayer(collisionShip,enemies);
     if(!isDead){
@@ -291,6 +296,17 @@ function damagePlayer(collisionShip,enemy){
         collisionShip.kill();
 		isDead = true;
     }
+}
+
+function damageBoss(soyBottle, boss){
+	soyBottle.kill();
+	boss.health--;
+	if (boss.health==0){
+		boss.kill;
+		bosses.remove(boss);
+		score+=500;
+		scoreText.text = 'Score: ' + score;
+	}
 }
 function damageEnemy(soyBottle,enemy){
     soyBottle.kill();
@@ -337,6 +353,20 @@ function enemyMovementHandler(){
 					enemy.body.velocity.x = Math.random()*200-100;
 				}
 				enemy.body.velocity.y = 200;
+			} else if (enemy.type===4){
+				if (enemy.body.velocity.x === 0){
+					enemy.body.velocity.x = 100;
+				}
+				if (enemy.body.x < 100){
+					enemy.body.velocity.x = 100;
+				} else if (enemy.body.x > 600){
+					enemy.body.velocity.x = -100;
+				}
+			} else if (enemy.type===5){
+				if (enemy.body.velocity.x ===0){
+					enemy.body.velocity.x = Math.random()*200-100;
+				}
+				enemy.body.velocity.y = 200;
 			} else {
 				enemy.body.velocity.x = Math.random()*200-100;
 				enemy.body.velocity.y = Math.random()*200-100;
@@ -361,12 +391,6 @@ function bossMovementHandler(){
 			boss.body.velocity.x = speed;
 		} else if (boss.body.x > 600) {
 			boss.body.velocity.x = -1 * speed;
-		}
-		boss.shoot--;
-		if (boss.shoot===0){
-			if (Math.floor(Math.random())==0){
-				
-			}
 		}
 	}, this);
 }
@@ -422,10 +446,10 @@ function enemyfire(enemy){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'hotdog_projectile');
 		minifood.body.velocity.x = (collisionShip.x-enemy.body.x)*.9;
 		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*.9;
-	} else if(enemy.type == 4){
+	} else if(enemy.type == 4 || enemy.type == 5){
         var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'fries_projectile');
 		minifood.body.velocity.x = 0;
-		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*1.5;
+		minifood.body.velocity.y = 200;
 	} else {
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
 		minifood.body.velocity.y = 100;
