@@ -636,7 +636,9 @@ function bossMovementHandler(){
 	}, this);
 }
 function controlHandler(){
-
+	if(isDead){
+        return;
+    }
 	if(spaceKey.isDown){
 		if(!isDead){
 			fire();
@@ -652,10 +654,6 @@ function controlHandler(){
 		} else{
 			 ship.frame = 0;
 		}
-    }
-
-    if(isDead){
-        return;
     }
     //remove this comment after adding animations
     if(cursors.left.isDown){
