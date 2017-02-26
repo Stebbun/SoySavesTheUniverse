@@ -2,6 +2,10 @@ var game = new Phaser.Game(800, 800, Phaser.AUTO, '', { preload: preload, create
 var music;
 
 var gameStarted;
+var score;
+var scoreText;
+var healthBack;
+var healthFore;
 
 var ship;
 
@@ -30,6 +34,9 @@ function preload() {
 	game.load.image('colShip', 'assets/collisionShip.png');
     game.load.image('soybottle', 'assets/Ship_Projectile.png');
     game.load.audio('soy_song', 'assets/soy_sonata.wav');
+	
+	game.load.image('health_fore', 'assets/Health_Foreground.png');
+    game.load.image('health_back', 'assets/Health_Background.png');
 
     game.load.image('burger', 'assets/Burger_Enemy.png');
 }
@@ -40,6 +47,7 @@ function create(){
     fireRate = 100;
     nextFireTime = 0;
     enemyCount = 0;
+	score = 0;
 
     //add music
     music = game.add.audio('soy_song');
@@ -55,7 +63,7 @@ function create(){
 
     //add player controlled ship
     ship = game.add.sprite(32, game.world.height - 150, 'ship');
-	ship.health = 20;
+	ship.health = 512;
     collisionShip = game.add.sprite(ship.x + 21,game.world.height - 140, 'colShip');
     game.physics.arcade.enable(collisionShip);
     collisionShip.visible = true;
@@ -75,6 +83,21 @@ function create(){
     makeInitEnemies();
 
     makeEnemyTimer();
+	
+	makeScoreLabel();
+
+    makeHealthBar();
+}
+
+function makeHealthBar(){
+    healthBack = game.add.sprite(2, game.world.height - 512, 'health_back');
+    healthFore = game.add.sprite(2, game.world.height - 512, 'health_fore');
+    healthBack.scale.setTo(1, 2);
+    healthFore.scale.setTo(1, 2);
+}
+
+function makeScoreLabel(){
+    scoreText = game.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 }
 
 function makeInitEnemies(){
@@ -168,9 +191,10 @@ function update(){
     }
 }
 function damagePlayer(collisionShip,enemy){
-    ship.health = ship.health - 5;
+    ship.health = ship.health - (512/5);
+	healthFore.height = ship.health;
     enemy.kill();
-    if(ship.health <= 0){
+    if(ship.health <= 3){
         ship.kill();
         collisionShip.kill();
     }
@@ -180,6 +204,8 @@ function damageEnemy(soyBottle,enemy){
     enemy.health -= 1;
     if(enemy.health == 0){
         enemy.kill();
+		score += 100;
+        scoreText.text = 'Score: ' + score;
         enemyCount--;
     }
     
