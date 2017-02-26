@@ -47,6 +47,8 @@ function preload() {
 	
 	game.load.image('health_fore', 'assets/Health_Foreground.png');
     game.load.image('health_back', 'assets/Health_Background.png');
+    game.load.image('mana_fore', 'assets/ManaFront.png');
+    game.load.image('mana_back', 'assets/ManaBack.png');
 
     game.load.image('burger', 'assets/Burger_Enemy.png');
 	game.load.image('burger_projectile', 'assets/Burger_Projectile.png');
@@ -173,8 +175,11 @@ function blinkText(){
 function makeHealthBar(){
     healthBack = game.add.sprite(0, game.world.height-32, 'health_back');
     healthFore = game.add.sprite(0, game.world.height-32, 'health_fore');
-	healthBack.width = game.width;
-	healthFore.width = game.width;
+	//healthBack.width = game.width;
+	//healthFore.width = game.width;
+    manaBack = game.add.sprite(game.width-32, game.world.height-256-32, 'mana_back');
+    manaFore = game.add.sprite(game.width-32, game.world.height-256-32, 'mana_fore');
+
 }
 
 function makeScoreLabel(){
