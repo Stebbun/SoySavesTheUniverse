@@ -133,9 +133,12 @@ function spawnEnemy(){
 		if (Math.floor(Math.random()*2)==0){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
 			baddie.type = 0;
-		} else {
+		} else if (score>=2000){
 			var baddie = enemies.create( (Math.random() *5) *160, 0, 'hotdog'); 
 			baddie.type = 1;
+		} else {
+			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
+			baddie.type = 0;
 		}
 		baddie.move = 0;
 		baddie.health = 5;
@@ -228,6 +231,7 @@ function damageEnemy(soyBottle,enemy){
     enemy.health -= 1;
     if(enemy.health == 0){
         enemy.kill();
+		enemies.remove(enemy);
 		score += 100;
         scoreText.text = 'Score: ' + score;
         enemyCount--;
@@ -313,7 +317,8 @@ function enemyfire(enemy){
 		minifood.body.velocity.y = 100;
 	} else if (enemy.type === 1){
 		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'hotdog_projectile');
-		minifood.body.velocity.y = 100;
+		minifood.body.velocity.x = (collisionShip.x-enemy.body.x)*.9;
+		minifood.body.velocity.y = (collisionShip.y-enemy.body.y)*.9;
 	}
 	
 }
