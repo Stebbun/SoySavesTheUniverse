@@ -29,7 +29,7 @@ var spaceKey;
 
 function preload() {
     game.load.spritesheet('ship', 'assets/Ship.png', 64, 64);
-    game.load.image('sky', 'assets/sky.png');
+    game.load.image('sky', 'assets/space_background.png');
     //game.load.image('soybean', 'assets/sky.png');
     //game.load.image('soymilk', 'assets/sky.png');
 	game.load.image('colShip', 'assets/collisionShip.png');
@@ -95,8 +95,8 @@ function create(){
 }
 
 function makeHealthBar(){
-    healthBack = game.add.sprite(0, game.world.height-64, 'health_back');
-    healthFore = game.add.sprite(0, game.world.height-64, 'health_fore');
+    healthBack = game.add.sprite(0, game.world.height-32, 'health_back');
+    healthFore = game.add.sprite(0, game.world.height-32, 'health_fore');
 	healthBack.width = game.width;
 	healthFore.width = game.width;
 }
