@@ -41,6 +41,9 @@ function preload() {
 
     game.load.image('burger', 'assets/Burger_Enemy.png');
 	game.load.image('burger_projectile', 'assets/Burger_Projectile.png');
+	
+	game.load.image('hotdog', 'assets/HotDog.png');
+	game.load.image('hotdog_projectile', 'assets/HotDog_Projectile.png');
 }
 
 function create(){
@@ -108,6 +111,7 @@ function makeInitEnemies(){
 
     for(var i = 0; i < 5; i++){
         var baddie = enemies.create(i*160, 0, 'burger');
+		baddie.type = 0; // 0 is burger, 1 is hotdog, can be expanded
 		baddie.move = 0;
 		baddie.health = 5;
 		baddie.shoot = 200;
@@ -126,7 +130,13 @@ function makeEnemyTimer(){
 
 function spawnEnemy(){
     if(enemyCount < 10){
-        var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
+		if (Math.floor(Math.random()*2)==0){
+			var baddie = enemies.create( (Math.random() *5) *160, 0, 'burger');
+			baddie.type = 0;
+		} else {
+			var baddie = enemies.create( (Math.random() *5) *160, 0, 'hotdog'); 
+			baddie.type = 1;
+		}
 		baddie.move = 0;
 		baddie.health = 5;
 		baddie.shoot = 50;
@@ -158,7 +168,8 @@ function makeProjectiles(){
 	enemyProjectiles.enableBody = true;
 	enemyProjectiles.phyicsBodyType = Phaser.Physics.ARCADE;
 	
-	enemyProjectiles.createMultiple(150, 'burger_projectile');
+	enemyProjectiles.createMultiple(10,'burger_projectile');
+	enemyProjectiles.createMultiple(10,'hotdog_projectile');
 	enemyProjectiles.setAll('checkWorldBounds',true);
 	enemyProjectiles.setAll('outOfBoundsKill',true);
 	
@@ -297,7 +308,12 @@ function fire(){
 }
 
 function enemyfire(enemy){
-	var minifood = enemyProjectiles.getFirstDead();
-	minifood.reset(enemy.body.x,enemy.body.y);
-	minifood.body.velocity.y = 100;
+	if (enemy.type === 0){
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'burger_projectile');
+		minifood.body.velocity.y = 100;
+	} else if (enemy.type === 1){
+		var minifood = enemyProjectiles.create(enemy.body.x,enemy.body.y,'hotdog_projectile');
+		minifood.body.velocity.y = 100;
+	}
+	
 }
