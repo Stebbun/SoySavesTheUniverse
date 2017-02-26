@@ -437,7 +437,9 @@ function cleanBullets(){
 	enemyProjectiles.forEachDead(function(projectile){
 		enemyProjectiles.remove(projectile);
 	}, this);
-	
+	enemies.forEachDead(function(enemy){
+		enemies.remove(enemy);
+	}, this);
 }
 function enemyMovementHandler(){
     enemies.forEach(function(enemy){
