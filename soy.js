@@ -119,6 +119,8 @@ function create(){
     makeTitleScreen();
 
     makeItRainSoy();
+
+    game.state.add();
 }
 
 function makeItRainSoy(){
@@ -354,6 +356,11 @@ function update(){
         }
     }
 }
+
+function restart(){
+    game.state.start(game.state.current);
+}
+
 function damagePlayer(collisionShip,enemy){
     ship.health = ship.health - (512/5)
 	healthFore.width = game.width *(ship.health / 512);
