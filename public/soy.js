@@ -669,14 +669,7 @@ function controlHandler(){
     }
     else if(cursors.down.isDown){
         ship.body.velocity.y = 300;
-    }
-    else{
-        // idle
-        if(!isDead && !animInProgress){
-            ship.animations.stop();
-            ship.frame = 0;
-        }
-    }
+	}
 }
 
 function fire(){
